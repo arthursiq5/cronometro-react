@@ -2,25 +2,17 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-  const [ seconds, setSeconds ] = useState(0)
-  const [ minutes, setMinutes ] = useState(0)
-  const [ hours, setHours ] = useState(0)
+  const [ time, setTime ] = useState(0)
   const [ isRunning, setIsRunning ] = useState(false)
 
   useEffect(() => {
     let interval;
     if (isRunning) {
       interval = setInterval(() => {
-        setSeconds(seconds + 1)
-        if (seconds === 60) {
-          setSeconds(0)
-          setMinutes(minutes + 1)
-        }
-        if (minutes === 60) {
-          setMinutes(0)
-          setHours(hours + 1)
-        }
+        setTime(prevTime => prevTime + 1)
       }, 1000)
+    } else {
+      clearInterval(interval)
     }
     return () => clearInterval(interval)
   }, [isRunning])
@@ -29,17 +21,23 @@ function App() {
   const pause = () => setIsRunning(false)
   const stop = () => {
     setIsRunning(false)
-    setSeconds(0)
-    setMinutes(0)
-    setHours(0)
+    setTime(0)
   }
 
-  const twoDigits = (num) => (num < 10 ? `0${num}` : num);
+  const formatTime = passedTime => {
+    const hours = Math.floor(passedTime / 3600);
+    const minutes = Math.floor((passedTime % 3600) / 60);
+    const seconds = passedTime % 60;
+
+    return [hours, minutes, seconds]
+      .map(num => num.toString().padStart(2, '0'))
+      .join(':');
+  }
 
   return (
     <div className="App">
       <div className="card">
-        <h1>{`${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}`}</h1>
+        <h1>{formatTime(time)}</h1>
         <div className="options">
           <button onClick={start}>start</button>
           <button onClick={stop}>stop</button>
