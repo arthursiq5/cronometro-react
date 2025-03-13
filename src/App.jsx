@@ -36,12 +36,12 @@ function App() {
 
   return (
     <div className="App">
-      <div className="card">
-        <h1>{formatTime(time)}</h1>
+      <div className="Card">
+        <h1 className="TimeView">{formatTime(time)}</h1>
         <div className="options">
-          <button onClick={start}>start</button>
-          <button onClick={stop}>stop</button>
-          <button onClick={pause}>pause</button>
+          <button className="Button StartButton" onClick={start}>start</button>
+          <button className="Button StopButton" onClick={stop}>stop</button>
+          <button className="Button PauseButton" onClick={pause}>pause</button>
         </div>
       </div>
     </div>
